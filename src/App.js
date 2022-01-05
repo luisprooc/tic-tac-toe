@@ -1,10 +1,11 @@
 import Home from "./components/Home";
+import MyContext from "./context/Api-context";
 
 const App = () => {
   return (
-    <div>
+    <MyContext>
       <Home />
-    </div>
+    </MyContext>
   );
 }
 
