@@ -1,3 +1,7 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Disallow:
+Header set Referrer-Policy "no-referrer-when-downgrade"
+Header set X-XSS-Protection "1; mode=block"
+Header set X-Frame-Options "sameorigin"
+Header set X-Content-Type-Options "nosniff"
