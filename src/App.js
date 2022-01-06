@@ -1,10 +1,10 @@
-import Home from "./components/Home";
+import Scene from "./components/Scene";
 import MyContext from "./context/Api-context";
 
 const App = () => {
   return (
     <MyContext>
-      <Home />
+      <Scene />
     </MyContext>
   );
 }

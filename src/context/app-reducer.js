@@ -1,12 +1,15 @@
-import {CHOOSE_ICON, CHANGE_SCENE} from '../actions/home-actions';
+import {CHOOSE_ICON, CHANGE_SCENE} from './app-actions';
 
-export const homeInitialState = {
+export const appInitialState = {
   playerIcon: '',
   botIcon: '',
-  scene: 'Home'
+  scene: 'Intro',
+  botScore: 0,
+  playerScore: 0,
+  rounds: 0
 };
 
-function homeReducer(state, action) {
+function appReducer(state, action) {
   switch (action.type) {
     case CHOOSE_ICON:
       return {
@@ -21,4 +24,4 @@ function homeReducer(state, action) {
   }
 }
 
-export default homeReducer;
+export default appReducer;
