@@ -1,11 +1,8 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Disallow:
-<IfModule mod_headers.c>
-Header set X-XSS-Protection "1; mode=block"
 
-Header set X-Frame-Options "sameorigin"
-
-Header set X-Content-Type-Options "nosniff"
-
-<IfModule mod_headers.c>
+X-XSS-Protection: "1; mode=block"
+X-Frame-Options: "sameorigin"
+X-Content-Type-Options "nosniff"
+Content-Security-Policy: default-src https://cdn.example.net; child-src 'none'; object-src 'none'
