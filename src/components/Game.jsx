@@ -1,11 +1,16 @@
 import { Button, Col } from "reactstrap";
 import React, { useContext } from "react";
 import { AppContext } from "../context/Api-context";
-// import { changeScene } from "../context/app-actions";
+import { ResetGame } from "../context/app-actions";
+
 
 const Game = () => {
 
-  const {state} = useContext(AppContext);
+  const {state, dispatch} = useContext(AppContext);
+
+  const handleGoBack = () => {
+    dispatch(ResetGame());
+  }
 
   return (
     <>
@@ -16,7 +21,7 @@ const Game = () => {
         <h6 className="fw-bold">BotScore: {state.botScore}</h6>
       </Col>
       <Col xs="12" className="my-2">
-        <Button color="primary"> Go Back </Button>
+        <Button color="primary" onClick={handleGoBack}> Go Back </Button>
       </Col>
     </>
   );
