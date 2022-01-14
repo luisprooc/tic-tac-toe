@@ -3,7 +3,7 @@ import {CHOOSE_ICON, CHANGE_SCENE, CHANGE_TURN, RESET_GAME} from './app-actions'
 export const appInitialState = {
   playerIcon: '',
   botIcon: '',
-  scene: 'Intro',
+  scene: 'INTRO',
   botScore: 0,
   playerScore: 0,
   rounds: 0,

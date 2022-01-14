@@ -1,17 +1,32 @@
 import { Table } from "reactstrap";
 import "./board.css";
-import React, { useState } from "react";
+import React, { useState, useEffect,useContext } from "react";
+import { AppContext } from "../../context/Api-context";
 
 const Board = () => {
-  const [table] = useState([
+  const [table, setTable] = useState([
     ["", "", ""],
     ["", "", ""],
     ["", "", ""],
   ]);
+  const {state, dispatch} = useContext(AppContext);;
 
   const selectBox = (e) => {
-    console.log(e.target.id);
+    if(state.scene === "GAME" && state.turn === "PLAYER") {
+      const [row,col] = e.target.id.split(',');
+      if (!table[row][col]) {
+        setTable(value => [...value, value[row][col] = "X"]);
+      } 
+    }
+
   };
+
+  useEffect(() => {
+    if(state.scene === "INTRO") {
+     
+    }
+  }, [table]);
+
 
   return (
     <Table borderless className="board-table">
@@ -25,6 +40,7 @@ const Board = () => {
                     className="board-border-right board-border-bottom"
                     id="0,0"
                     onClick={selectBox}
+                    key={index}
                   >
                     {value}
                   </th>
@@ -35,6 +51,7 @@ const Board = () => {
                     className="board-border-bottom board-border-right"
                     id="0,1"
                     onClick={selectBox}
+                    key={index}
                   >
                     {value}
                   </th>
@@ -44,6 +61,7 @@ const Board = () => {
                     className="board-border-bottom"
                     id="0,2"
                     onClick={selectBox}
+                    key={index}
                   >
                     {value}
                   </th>
@@ -61,6 +79,7 @@ const Board = () => {
                     className="board-border-bottom board-border-right"
                     id="1,0"
                     onClick={selectBox}
+                    key={index}
                   >
                     {value}
                   </th>
@@ -70,6 +89,7 @@ const Board = () => {
                     className="board-border-bottom board-border-right"
                     id="1,1"
                     onClick={selectBox}
+                    key={index}
                   >
                     {value}
                   </th>
@@ -79,6 +99,7 @@ const Board = () => {
                     className="board-border-bottom"
                     id="1,2"
                     onClick={selectBox}
+                    key={index}
                   >
                     {value}
                   </th>
@@ -96,6 +117,7 @@ const Board = () => {
                     className="board-border-right"
                     id="2,0"
                     onClick={selectBox}
+                    key={index}
                   >
                     {value}
                   </th>
@@ -106,13 +128,14 @@ const Board = () => {
                     className="board-border-right"
                     id="2,1"
                     onClick={selectBox}
+                    key={index}
                   >
                     {value}
                   </th>
                 )}
 
                 {index === 2 && (
-                  <th id="2,0" onClick={selectBox}>
+                  <th id="2,2" onClick={selectBox} key={index}>
                     {value}
                   </th>
                 )}
