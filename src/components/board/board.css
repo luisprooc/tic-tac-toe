@@ -12,6 +12,19 @@
   border-bottom: 2px solid black !important;
 }
 
+th {
+  position: relative;
+}
+
+th p {
+  position: absolute;
+  font-size: 3rem;
+  top: 30%;
+  left: 30%;
+  right: 30%;
+  bottom: 50%;
+}
+
 th:hover{
   background-color: rgb(236, 226, 226);
   cursor: pointer;

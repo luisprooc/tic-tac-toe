@@ -1,4 +1,4 @@
-import {CHOOSE_ICON, CHANGE_SCENE, CHANGE_TURN, RESET_GAME} from './app-actions';
+import {CHOOSE_ICON, CHANGE_SCENE, CHANGE_TURN, RESET_GAME, SET_ROUNDS} from './app-actions';
 
 export const appInitialState = {
   playerIcon: '',
@@ -26,6 +26,10 @@ function appReducer(state, action) {
 
     case RESET_GAME:
       return {...appInitialState};
+
+    case SET_ROUNDS:
+      return {...state, rounds: state.rounds + 1};
+
     default:
       return state;
   }
