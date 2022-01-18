@@ -30,6 +30,9 @@ export const ResetGame = () => ({
   type: RESET_GAME
 });
 
-export const setRounds = () => ({
-  type: SET_ROUNDS
+export const setRounds = (reset = false) => ({
+  type: SET_ROUNDS,
+  payload: {
+    reset
+  }
 });

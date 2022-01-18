@@ -28,7 +28,7 @@ function appReducer(state, action) {
       return {...appInitialState};
 
     case SET_ROUNDS:
-      return {...state, rounds: state.rounds + 1};
+      return {...state, rounds: action.payload.reset ? 0 : state.rounds + 1};
 
     default:
       return state;

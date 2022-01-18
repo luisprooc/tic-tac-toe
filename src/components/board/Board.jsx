@@ -4,6 +4,7 @@ import React, { useState, useEffect,useContext, useCallback } from "react";
 import { AppContext } from "../../context/Api-context";
 import { changeTurn, setRounds } from "../../context/app-actions";
 import { botPlay } from "./helpers/bot";
+import WinnerModal from "../utils/Modal";
 
 const Board = () => {
   const initialState = [
@@ -12,7 +13,9 @@ const Board = () => {
     [null, null, null]
   ];
   const [table, setTable] = useState(initialState);
-  const {state, dispatch} = useContext(AppContext);;
+  const {state, dispatch} = useContext(AppContext);
+  const [activeModal, setActiveModal] = useState(false);
+  const [winner, setWinner] = useState('Tier');
 
   const selectBox = (e) => {
     if(state.scene === "GAME" && state.turn === "PLAYER") {
@@ -26,7 +29,7 @@ const Board = () => {
 
   };
   const botTurn = useCallback(() => {
-    setTable(botPlay(table, state.botIcon, dispatch))
+    setTable(botPlay(table, state.botIcon));
     dispatch(changeTurn("PLAYER"));
     dispatch(setRounds());  
   }, [state, table, dispatch]);
@@ -37,9 +40,28 @@ const Board = () => {
     }
   }, [state, botTurn]);
 
+  useEffect(() => {
+    if(state.rounds === 9) {
+      setTable([
+        [null, null, null],
+        [null, null, null],
+        [null, null, null]
+      ]);
+      dispatch(setRounds(true));
+      setActiveModal(true);
+    }
+  }, [state.rounds, dispatch, setActiveModal]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setActiveModal(false);
+    },1700)
+  },[activeModal])
+
 
   return (
     <Table borderless className="board-table">
+      <WinnerModal show={activeModal} winner={winner}/>
       <thead>
         <tr>
           {table[0].map((value, index) => {
