@@ -5,22 +5,24 @@ import { AppContext } from "../../context/Api-context";
 import { changeTurn, setRounds } from "../../context/app-actions";
 import { botPlay } from "./helpers/bot";
 import WinnerModal from "../utils/Modal";
+import { verifyWinner } from "./helpers/verify-winner";
 
 const Board = () => {
-  const initialState = [
+  const [table, setTable] = useState([
     [null, null, null],
     [null, null, null],
     [null, null, null]
-  ];
-  const [table, setTable] = useState(initialState);
+  ]);
   const {state, dispatch} = useContext(AppContext);
   const [activeModal, setActiveModal] = useState(false);
-  const [winner, setWinner] = useState('Tier');
+  const [winner, setWinner] = useState("Tier");
+  const [lastMove, setLastMove] = useState("");
 
   const selectBox = (e) => {
     if(state.scene === "GAME" && state.turn === "PLAYER") {
       const [row,col] = e.target.id.split(',');
       if (!table[row][col]) {
+        setLastMove(e.target.id);
         setTable(value => [...value, value[row][col] = state.playerIcon]);
         dispatch(changeTurn("BOT"));
         dispatch(setRounds());
@@ -29,16 +31,35 @@ const Board = () => {
 
   };
   const botTurn = useCallback(() => {
-    setTable(botPlay(table, state.botIcon));
+    const { board, lastMove } = botPlay(table, state.botIcon);
+    setTable(board);
+    setLastMove(lastMove);
     dispatch(changeTurn("PLAYER"));
     dispatch(setRounds());  
   }, [state, table, dispatch]);
 
+  const checkWinner = useCallback(() => {
+    const icon = state.turn === "BOT" ? state.playerIcon : state.botIcon;
+    if(verifyWinner(table, lastMove, icon)) {
+      const winner = state.turn === "BOT" ? "PLAYER": "BOT";
+      setWinner(`${winner} WINS`);
+      setActiveModal(true);
+      setTable([
+        [null, null, null],
+        [null, null, null],
+        [null, null, null]
+      ]);
+      dispatch(setRounds(true));
+    }
+  }, [dispatch, lastMove, state.playerIcon, table, state.botIcon, state.turn]);
+
   useEffect(() => {
     if(state.turn === "BOT") {
-      botTurn();
+      setTimeout(() => {
+        botTurn();
+      },800)
     }
-  }, [state, botTurn]);
+  }, [state.turn, botTurn]);
 
   useEffect(() => {
     if(state.rounds === 9) {
@@ -50,7 +71,15 @@ const Board = () => {
       dispatch(setRounds(true));
       setActiveModal(true);
     }
-  }, [state.rounds, dispatch, setActiveModal]);
+
+    return () => {
+      if(state.rounds >= 5) {
+        checkWinner();
+      }
+
+    }
+
+  }, [state.rounds, dispatch, setActiveModal, checkWinner]);
 
   useEffect(() => {
     setTimeout(() => {
