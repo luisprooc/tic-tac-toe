@@ -2,7 +2,7 @@ import { Table } from "reactstrap";
 import "./board.css";
 import React, { useState, useEffect,useContext, useCallback } from "react";
 import { AppContext } from "../../context/Api-context";
-import { changeTurn, setRounds } from "../../context/app-actions";
+import { addBotScore, addPlayerScore, changeTurn, setRounds } from "../../context/app-actions";
 import { botPlay } from "./helpers/bot";
 import WinnerModal from "../utils/Modal";
 import { verifyWinner } from "./helpers/verify-winner";
@@ -41,8 +41,8 @@ const Board = () => {
   const checkWinner = useCallback(() => {
     const icon = state.turn === "BOT" ? state.playerIcon : state.botIcon;
     if(verifyWinner(table, lastMove, icon)) {
-      const winner = state.turn === "BOT" ? "PLAYER": "BOT";
-      setWinner(`${winner} WINS`);
+      const won = state.turn === "BOT" ? "PLAYER": "BOT";
+      setWinner(`${won} WINS`);
       setActiveModal(true);
       setTable([
         [null, null, null],
@@ -50,6 +50,7 @@ const Board = () => {
         [null, null, null]
       ]);
       dispatch(setRounds(true));
+      dispatch(won === "PLAYER" ? addPlayerScore(): addBotScore());
     }
   }, [dispatch, lastMove, state.playerIcon, table, state.botIcon, state.turn]);
 
@@ -68,6 +69,7 @@ const Board = () => {
         [null, null, null],
         [null, null, null]
       ]);
+      setWinner("Tier");
       dispatch(setRounds(true));
       setActiveModal(true);
     }
@@ -85,8 +87,17 @@ const Board = () => {
     setTimeout(() => {
       setActiveModal(false);
     },1700)
-  },[activeModal])
+  },[activeModal]);
 
+  useEffect(() => {
+    if(state.scene === "INTRO") {
+      setTable([
+        [null, null, null],
+        [null, null, null],
+        [null, null, null]
+      ]);
+    }
+  },[state.scene]);
 
   return (
     <Table borderless className="board-table">
