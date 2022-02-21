@@ -52,17 +52,31 @@ const Board = () => {
       dispatch(setRounds(true));
       dispatch(won === "PLAYER" ? addPlayerScore(): addBotScore());
     }
+
+    else {
+      return null;
+    }
   }, [dispatch, lastMove, state.playerIcon, table, state.botIcon, state.turn]);
 
   useEffect(() => {
-    if(state.turn === "BOT") {
-      setTimeout(() => {
+    const timer = setTimeout(() => {
+      if(state.turn === "BOT") {
         botTurn();
-      },800)
+      }
+
+    },800);
+
+    return () => {
+      clearTimeout(timer);
     }
   }, [state.turn, botTurn]);
 
   useEffect(() => {
+
+    if(state.rounds >= 5) {
+      checkWinner();
+    }
+
     if(state.rounds === 9) {
       setTable([
         [null, null, null],
@@ -74,12 +88,6 @@ const Board = () => {
       setActiveModal(true);
     }
 
-    return () => {
-      if(state.rounds >= 5) {
-        checkWinner();
-      }
-
-    }
 
   }, [state.rounds, dispatch, setActiveModal, checkWinner]);
 
