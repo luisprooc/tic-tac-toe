@@ -17,7 +17,7 @@ const Scene = () => {
         <Col xs="12">
           <Board />
         </Col>
-        {state.scene === "Intro" ? <Intro />: <Game />}
+        {state.scene === "INTRO" ? <Intro />: <Game />}
       </Row>
     </Container>
   );
